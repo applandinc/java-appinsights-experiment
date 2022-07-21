@@ -22,16 +22,6 @@ dependencies {
     implementation 'com.google.guava:guava:31.0.1-jre'
 }
 
-testing {
-    suites {
-        // Configure the built-in test suite
-        test {
-            // Use JUnit Jupiter test framework
-            useJUnitJupiter('5.8.2')
-        }
-    }
-}
-
 application {
     // Define the main class for the application.
     mainClass = 'land.app.experiment.appinsights.App'
