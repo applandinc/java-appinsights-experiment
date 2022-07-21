@@ -3,12 +3,34 @@
  */
 package land.app.experiment.appinsights;
 
+import com.azure.monitor.opentelemetry.exporter.implementation.models.ExportResult;
+import com.azure.monitor.opentelemetry.exporter.implementation.models.TelemetryItem;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            usage();
+        }
+
+        AppInsightsClient client = new AppInsightsClient(args[0]);
+        TelemetryItem item = new EventTelemetryBuilder("appmap-java")
+                .property("hello", "from Java")
+                .measurement("goodness", 42)
+                .build();
+
+        ExportResult result = client.track(item).block();
+
+        System.out.format("Items received: %d\nItems accepted: %d\n", result.getItemsReceived(),
+                result.getItemsAccepted());
     }
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+    private static void usage() {
+        System.out.println("Usage:");
+        System.out.println("\tApp <connection-string>");
+        System.out.println("");
+        System.out.println("Example:");
+        System.out.println(
+                "\tApp 'InstrumentationKey=8f38767a-0864-11ed-8ef0-00163e5e6c26;IngestionEndpoint=https://centralus-0.in.applicationinsights.azure.com/'");
+        System.exit(1);
     }
 }
